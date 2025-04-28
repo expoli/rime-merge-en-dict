@@ -1,0 +1,53 @@
+name: Merge English Dictionaries
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: en_dicts
+          key: en-dicts-${{ runner.os }}-${{ hashFiles('**/en_merge.dict.yaml') }}
+
+      - name: Commit changes
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add config.json en_merge.dict.yaml
+          git commit -m 'Update merged dictionaries'
+          git push
+
+      - name: Merge dictionaries
+        run: python en_merge.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --exit-code || echo '::set-output name=changes::true'
+
+      - name: Create release
+        if: steps.changes.outputs.changes == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: nightly
+          name: Nightly Release
+          body: 'Automated nightly release of merged English dictionaries'
+          files: en_dicts/en_merge.dict.yaml

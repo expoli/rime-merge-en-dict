@@ -1,0 +1,19 @@
+{
+  "repositories": [
+    {
+      "repo_url": "iDvel/rime-ice",
+      "file_paths": [
+        "en_dicts/en.dict.yaml",
+        "en_dicts/en_ext.dict.yaml"
+      ],
+      "last_update": ""
+    },
+    {
+      "repo_url": "rimeinn/rime-moran",
+      "file_paths": [
+        "moran_english.dict.yaml"
+      ],
+      "last_update": ""
+    }
+  ]
+}
