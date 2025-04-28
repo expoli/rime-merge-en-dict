@@ -87,7 +87,7 @@ def save_merged_words(words:dict):
         f.write('# ------- 英文合并词库 -------\n')
         f.write('# https://github.com/expoli/rime-en_dicts\n')
         f.write('---\n')
-        f.write('name: merge_en\n')
+        f.write('name: en_merge\n')
         f.write(f'version: "{datetime.now().strftime("%Y-%m-%d")}"\n')
         f.write('sort: by_weight\n')
         f.write('...\n\n')

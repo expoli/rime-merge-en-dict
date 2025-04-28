@@ -14,6 +14,14 @@
         "moran_english.dict.yaml"
       ],
       "last_update": "2025-03-30T00:00:02Z"
+    },
+    {
+      "repo_url": "amzxyz/rime_wanxiang",
+      "file_paths": [
+        "en_dicts/en.dict.yaml",
+        "en_dicts/en_ext.dict.yaml"
+      ],
+      "last_update": ""
     }
   ]
 }
