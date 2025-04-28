@@ -2,7 +2,8 @@ import json
 import os
 import requests
 from datetime import datetime
-# import yaml
+import sys
+import io
 
 # 配置文件路径
 CONFIG_FILE = 'config.json'
@@ -21,13 +22,13 @@ def get_github_file_update_time(repo_url, file_path):
 # 加载本地配置文件
 def load_config():
     if os.path.exists(CONFIG_FILE):
-        with open(CONFIG_FILE, 'r') as f:
+        with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
     return {}
 
 # 保存配置文件
 def save_config(config):
-    with open(CONFIG_FILE, 'w') as f:
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
         json.dump(config, f, indent=2)
 
 # 从GitHub下载文件
@@ -84,6 +85,7 @@ def save_merged_words(words:dict):
         f.write('# Rime dictionary\n')
         f.write('# encoding: utf-8\n')
         f.write('# ------- 英文合并词库 -------\n')
+        f.write('# https://github.com/expoli/rime-en_dicts\n')
         f.write('---\n')
         f.write('name: merge_en\n')
         f.write(f'version: "{datetime.now().strftime("%Y-%m-%d")}"\n')
@@ -91,10 +93,11 @@ def save_merged_words(words:dict):
         f.write('...\n\n')
         # 写入词库内容
         for key in sorted(words, key=lambda x: x.split('\t')[0].lower()):
-            f.write(words[key])
+            f.write(words[key].rstrip('\n') + '\n')
 
 # 主函数
 def main(debug_mode=True):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     config = load_config()
     
     if 'repositories' not in config:
@@ -103,14 +106,14 @@ def main(debug_mode=True):
     
     # 加载现有词库
     existing_words = {}
-    if os.path.exists(MERGE_FILE):
-        with open(MERGE_FILE, 'r', encoding='utf-8') as f:
-            for line in f:
-                if '\t' in line:
-                    key = line.split('\t')[0]
-                    if key .startswith('#'):
-                        continue
-                    existing_words[key] = line
+    # if os.path.exists(MERGE_FILE):
+    #     with open(MERGE_FILE, 'r', encoding='utf-8') as f:
+    #         for line in f:
+    #             if '\t' in line:
+    #                 key = line.split('\t')[0]
+    #                 if key .startswith('#'):
+    #                     continue
+    #                 existing_words[key] = line
     
     updated = False
     
@@ -144,7 +147,8 @@ def main(debug_mode=True):
                     existing_words = merge_words(existing_words, new_words, repo_config['repo_url'] + '/' + file_path, debug_mode)
                     
                     # 更新配置
-                    repo_config['last_update'] = remote_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+                    if remote_time:
+                        repo_config['last_update'] = remote_time.strftime('%Y-%m-%dT%H:%M:%SZ')
                     updated = True
                 else:
                     print(f'文件下载失败: {file_path}')
