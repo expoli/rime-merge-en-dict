@@ -1,13 +1,15 @@
 import json
 import os
+import re
 import requests
 from datetime import datetime
 import sys
 import io
 
 # 配置文件路径
+MERGE_FILE_NAME = 'en_merge'
 CONFIG_FILE = 'config.json'
-MERGE_FILE = 'en_merge.dict.yaml'
+MERGE_FILE = f'{MERGE_FILE_NAME}.dict.yaml'
 
 # 从GitHub获取文件更新时间
 def get_github_file_update_time(repo_url, file_path):
@@ -57,15 +59,49 @@ def download_github_file(repo_url, file_path):
         return response.text
     return None
 
+def contains_special_characters(s):
+    return bool(re.search(r'[^a-zA-Z]', s))
+
+def remove_special_characters(s):
+    return re.sub(r'[^a-zA-Z0-9]', '', s)
+
+def contains_non_alpha(s):
+    return len(re.findall(r'[^a-zA-Z]', s))
+
 # 提取英文词库
 def extract_english_words(content):
     words = {}
+    # filtered_lines = []
     for line in content.split('\n'):
         if '\t' in line:
-            key = line.split('\t')[0]
-            if key .startswith('#'):
+            if line.startswith('#'):
                 continue
+            # value = line.split('\t')[1]
+            # # 过滤掉编码中以数字开头的行
+            # if value[0].isdigit():
+            #     filtered_lines.append(line)
+            #     continue
+            # if contains_non_alpha(value) == 0 or contains_non_alpha(value) == 1:
+            #     clear_value = remove_special_characters(value)
+            #     # 重新组合line数据
+            #     parts = line.split('\t')
+            #     if len(parts) == 2:
+            #         parts[1] = clear_value
+            #         line = '\t'.join(parts)
+            # else:
+            #     filtered_lines.append(line)
+            #     continue
+            # # 过滤掉编码中以特殊字符开头的行如 .DS_Store和.gitignore等
+            # if contains_special_characters(value):
+            #     filtered_lines.append(line)
+            #     continue
+            # 使用去除特殊符号的整行作为key
+            key = remove_special_characters(line)
             words[key] = line
+    # # 将过滤掉的行写入记录文件
+    # if filtered_lines:
+    #     with open('filtered_lines.log', 'w', encoding='utf-8') as f:
+    #         f.write('\n'.join(filtered_lines) + '\n')
     return words
 
 # 合并词库
@@ -87,9 +123,10 @@ def save_merged_words(words:dict):
         f.write('# ------- 英文合并词库 -------\n')
         f.write('# https://github.com/expoli/rime-en_dicts\n')
         f.write('---\n')
-        f.write('name: en_merge\n')
+        f.write(f'name: {MERGE_FILE_NAME}\n')
         f.write(f'version: "{datetime.now().strftime("%Y-%m-%d")}"\n')
-        f.write('sort: by_weight\n')
+        f.write('sort: original\n')
+        f.write('use_preset_vocabulary: false\n')
         f.write('...\n\n')
         # 写入词库内容
         for key in sorted(words, key=lambda x: x.split('\t')[0].lower()):
