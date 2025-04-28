@@ -4,6 +4,12 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * 1'
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   merge:
@@ -24,7 +30,15 @@ jobs:
         uses: actions/cache@v3
         with:
           path: en_dicts
-          key: en-dicts-${{ runner.os }}-${{ hashFiles('**/en_merge.dict.yaml') }}
+          key: en-dicts-${{ runner.os }}-${{ hashFiles('**/en_merge.dict.yaml') }}-${{ github.run_id }}
+
+      - name: Merge dictionaries
+        run: python en_merge.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --exit-code && echo "changes=false" >> $GITHUB_OUTPUT || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Commit changes
         if: steps.changes.outputs.changes == 'true'
@@ -35,14 +49,6 @@ jobs:
           git commit -m 'Update merged dictionaries'
           git push
 
-      - name: Merge dictionaries
-        run: python en_merge.py
-
-      - name: Check for changes
-        id: changes
-        run: |
-          git diff --exit-code || echo '::set-output name=changes::true'
-
       - name: Create release
         if: steps.changes.outputs.changes == 'true'
         uses: softprops/action-gh-release@v1
@@ -50,4 +56,6 @@ jobs:
           tag_name: nightly
           name: Nightly Release
           body: 'Automated nightly release of merged English dictionaries'
-          files: en_dicts/en_merge.dict.yaml
+          files: |
+            en_dicts/en_merge.dict.yaml
+            config.json
