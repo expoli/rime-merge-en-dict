@@ -22,6 +22,14 @@
         "en_dicts/en_ext.dict.yaml"
       ],
       "last_update": "2025-04-14T23:44:45Z"
+    },
+    {
+      "repo_url": "gaboolic/rime-frost",
+      "file_paths": [
+        "en_dicts/en.dict.yaml",
+        "en_dicts/en_ext.dict.yaml"
+      ],
+      "last_update": ""
     }
   ]
 }
