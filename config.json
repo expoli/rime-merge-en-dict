@@ -6,14 +6,14 @@
         "en_dicts/en.dict.yaml",
         "en_dicts/en_ext.dict.yaml"
       ],
-      "last_update": "2025-04-22T15:03:58Z"
+      "last_update": "2025-05-11T09:36:27Z"
     },
     {
       "repo_url": "rimeinn/rime-moran",
       "file_paths": [
         "moran_english.dict.yaml"
       ],
-      "last_update": "2025-05-04T05:36:17Z"
+      "last_update": "2025-05-09T21:33:27Z"
     },
     {
       "repo_url": "amzxyz/rime_wanxiang",
@@ -21,7 +21,7 @@
         "en_dicts/en.dict.yaml",
         "en_dicts/en_ext.dict.yaml"
       ],
-      "last_update": "2025-04-14T23:44:45Z"
+      "last_update": "2025-05-08T14:47:01Z"
     },
     {
       "repo_url": "gaboolic/rime-frost",
