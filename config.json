@@ -6,7 +6,7 @@
         "en_dicts/en.dict.yaml",
         "en_dicts/en_ext.dict.yaml"
       ],
-      "last_update": "2025-05-16T13:15:40Z"
+      "last_update": "2025-05-19T07:53:02Z"
     },
     {
       "repo_url": "rimeinn/rime-moran",
@@ -21,7 +21,7 @@
         "en_dicts/en.dict.yaml",
         "en_dicts/en_ext.dict.yaml"
       ],
-      "last_update": "2025-05-08T14:47:01Z"
+      "last_update": "2025-05-26T00:35:45Z"
     },
     {
       "repo_url": "gaboolic/rime-frost",
