@@ -30,6 +30,12 @@
         "en_dicts/en_ext.dict.yaml"
       ],
       "last_update": "2025-02-04T02:52:31Z"
+    },
+    {
+      "repo_url": "expoli/rime-en_dicts",
+      "file_paths": [
+        "en_addons.dict.yaml"
+      ]
     }
   ]
 }
