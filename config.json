@@ -32,7 +32,7 @@
       "last_update": "2025-02-04T02:52:31Z"
     },
     {
-      "repo_url": "expoli/rime-en_dicts",
+      "repo_url": "expoli/rime-merge-en-dict",
       "file_paths": [
         "en_addons.dict.yaml"
       ],
