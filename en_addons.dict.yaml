@@ -1,0 +1,21 @@
+# Rime dictionary
+# encoding: utf-8
+# ------- 英文合并词库 -------
+# https://github.com/expoli/rime-en_dicts
+---
+name: en_addons
+version: "2025-05-27"
+sort: original
+use_preset_vocabulary: false
+...
+
+expoli	expoli
+flowchart	flowchart
+winget	winget
+Windows Terminal	WindowsTerminal
+Windows Terminal Preview	WindowsTerminalPreview
+siyuan	siyuan
+mermaid	Mermaid
+Mermaid	Mermaid
+tangcuyu	tangcuyu
+tcy	tcy
